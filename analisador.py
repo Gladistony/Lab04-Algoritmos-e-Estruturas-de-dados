@@ -2,6 +2,35 @@ class Analisador:
     def __init__(self):
         pass
 
+    def acha_sequencia_nao_gulosa(self, probs, valores) -> int:
+        tamanho = len(valores)
+        possibilidades = self.gerar_sequencia(tamanho) 
+        melhorOrdem = possibilidades[0] 
+        melhorResultado = self.calcularTotalGanhos(probs, valores, melhorOrdem)
+        for o in possibilidades:
+            resultado = self.calcularTotalGanhos(probs, valores, o)
+            if resultado > melhorResultado:
+                melhorResultado = resultado
+                melhorOrdem = o
+        return melhorOrdem
+    
+    def gerar_sequencia(self, tamanho):
+        self.resultados = []
+        self.gerar_sequencias_rec(tamanho)
+        return self.resultados
+    def gerar_sequencias_rec(self, tamanho, sequencia=[], usados=[]):
+        if len(sequencia) == tamanho: 
+            self.resultados.append(sequencia.copy()) 
+        else:
+            for id in range(tamanho): 
+                if id not in usados: 
+                    sequencia.append(id) 
+                    usados.append(id)
+                    self.gerar_sequencias_rec(tamanho, sequencia, usados) 
+                    sequencia.pop() 
+                    usados.remove(id) 
+        return self.resultados 
+
     def acha_sequencia(self, probs, valores) -> int:
         tamanho = len(valores)
         ordem = []
@@ -28,6 +57,9 @@ class Analisador:
                     melhor = i
                     melhor_valor = valor
         return melhor 
+    
+    def calcularTotalGanhos(self, probs, valores, ordem) -> int:
+        return self.objetivo(ordem, probs, valores)
 
     def objetivo(self, ordem, probs, valores) -> float:
         resultado = 0
