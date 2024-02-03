@@ -35,14 +35,10 @@ class Analisador:
         tamanho = len(valores)
         ordem = []
         usados = [] 
-        valor_acumulado = 0 
-        prob_acumulada = 1 
         while len(ordem) < tamanho: 
             x = self.seleciona(probs, valores, usados) 
             ordem.append(x) 
             usados.append(x) 
-            valor_acumulado += valores[x] 
-            prob_acumulada *= probs[x] 
         return ordem 
 
 
